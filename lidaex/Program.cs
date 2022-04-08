@@ -123,7 +123,7 @@ public static class Processor
 
         try
         {
-            File.WriteAllText(OutputFile, JsonSerializer.Serialize(orderedTeams));
+            File.WriteAllText(OutputFile, JsonSerializer.Serialize(orderedTeams, new JsonSerializerOptions {WriteIndented = true}));
         }
         catch (Exception e)
         {
@@ -267,8 +267,14 @@ public static class Processor
                         $"TeamBattle.Teams не содержит идентификатор команды \"{teamStanding.Id}\" из TeamStanding");
 
                 team.LichessScore += teamStanding.Score;
-                team.Score += ApplyPointRule(pointRule, teamStanding);
-                team.Results.Add(new TeamTournamentResult(lichessTournament.Id, CurrentTournamentSet.Id, teamStanding.Rank,
+                var score = ApplyPointRule(pointRule, teamStanding);
+                team.Score += score;
+                team.Results.Add(new TeamTournamentResult(
+                    lichessTournament.Id,
+                    CurrentTournamentSet.Id,
+                    teamStanding.Rank,
+                    score,
+                    teamStanding.Score,
                     pointRule.Name));
             }
         }
