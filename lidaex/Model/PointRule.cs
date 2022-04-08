@@ -1,17 +1,8 @@
 ﻿namespace lidaex.Model;
 
-public class PointRule
+public record PointRule(string Name, string Id)
 {
-    public PointRule(string name, string id)
-    {
-        Name = name;
-        Id = id;
-        Points = new List<double>();
-    }
-
-    public string Name { get; set; }
-    public string Id { get; set; }
-    public IList<double> Points { get; set; }
+    public IList<decimal> Points { get; init; } = new List<decimal>();
 
     public override string ToString()
     {

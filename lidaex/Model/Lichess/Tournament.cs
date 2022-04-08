@@ -2,7 +2,6 @@
 
 namespace lidaex.Model.Lichess;
 
-// Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
 public class Sheet
 {
     [JsonPropertyName("scores")] public string? Scores { get; set; }
