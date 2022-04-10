@@ -278,7 +278,8 @@ public static class Processor
                     teamStanding.Rank,
                     score,
                     teamStanding.Score,
-                    pointRule.Name));
+                    pointRule.Name,
+                    lichessTournament.StartsAt.Date));
             }
         }
         catch (Exception e)
