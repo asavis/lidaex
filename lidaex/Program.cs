@@ -11,11 +11,18 @@ public static class Processor
 {
     private const string ConfigFileName1 = "Конфигурация.txt";
     private const string ConfigFileName2 = @"..\..\..\Конфигурация.txt";
-    private const string OutputFile = "Турнирная Таблица.json";
+    private const string OutputFile = "standings.json";
 
     private static readonly IList<PointRule> PointRules = new List<PointRule>();
     private static readonly IList<TournamentSet> TournamentSets = new List<TournamentSet>();
     private static readonly IDictionary<string, Team> Teams = new Dictionary<string, Team>();
+
+    private static readonly Regex PointRulesTitleRegex = new(@"Правила\s*начисления\s*очков", RegexOptions.IgnoreCase);
+    private static readonly Regex PointRulesRegex = new(@"^(?:(.+?)\s*(?:\(s*(.+?)s*\)))\s*:s*(?:\s*([\d.,]+))+$");
+    private static readonly Regex LichessTournamentUriRegex = new(@".+/(.+)$", RegexOptions.IgnoreCase);
+
+    private static readonly Regex NewTournamentDefinitionRegex =
+        new(@"^\s*Турнир\s*(.+?)\s*\(s*(.+?)s*\)\s*\[s*(.+?)s*\]\s*\:$", RegexOptions.IgnoreCase);
 
     private static TournamentSet? CurrentTournamentSet => TournamentSets.LastOrDefault();
     private static bool IsFirstTournamentSet => TournamentSets.Count < 2;
@@ -133,13 +140,10 @@ public static class Processor
 
     private static void ParseAndProcessPointRules(string line)
     {
-        var regex = new Regex(@"Правила\s*начисления\s*очков", RegexOptions.IgnoreCase);
-        var match = regex.Match(line);
+        var match = PointRulesTitleRegex.Match(line);
         if (match.Success) return;
 
-        regex = new Regex(@"^(?:(.+?)\s*(?:\(s*(.+?)s*\)))\s*:s*(?:\s*([\d.,]+))+$");
-
-        match = regex.Match(line);
+        match = PointRulesRegex.Match(line);
         if (!match.Success)
             throw new ApplicationException(
                 "Ожидалось правило начисления очков. Например: Вища ліга  (D0): 12.0 11.8 11.6 11.4 11.2 11.0 10.8 10.6 10.4 10.2");
@@ -177,8 +181,7 @@ public static class Processor
 
     private static void ParseAndProcessNewTournamentDefinition(string line)
     {
-        var regex = new Regex(@"^\s*Турнир\s*(.+?)\s*\(s*(.+?)s*\)\s*\[s*(.+?)s*\]\s*\:$", RegexOptions.IgnoreCase);
-        var match = regex.Match(line);
+        var match = NewTournamentDefinitionRegex.Match(line);
         if (!match.Success)
             throw new ApplicationException("Ожидался заголовок турнира. Например: Турнир 1 (97) [2021-12-10]:");
 
@@ -287,8 +290,7 @@ public static class Processor
 
     private static Root? GetLichessTournament(string line)
     {
-        var regex = new Regex(@".+/(.+)$", RegexOptions.IgnoreCase);
-        var match = regex.Match(line);
+        var match = LichessTournamentUriRegex.Match(line);
         if (!match.Success)
             throw new ApplicationException(
                 "Ожидалась ссылка на турнир. Например: https://lichess.org/tournament/OfHw11H5");
