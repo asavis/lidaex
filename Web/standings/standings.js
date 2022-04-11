@@ -61,8 +61,9 @@ Ext.onReady(function() {
                     width: 75,
                     dataIndex: "Rank",
                     renderer: function(value, metaData, record, row, col, store, gridView) {
-                        if (row > 2) return value;
-                        return value + `<img src="${RanksIcons[row]}" width=22 align=right />`;
+                        const rank = record.data["Rank"];
+                        if (rank > 3) return value;
+                        return value + `<img src="${RanksIcons[rank - 1]}" width=22 align=right />`;
                     }
                 },
                 {
@@ -78,6 +79,7 @@ Ext.onReady(function() {
                 {
                     text: "Турніри",
                     flex: 1,
+                    sortable: false,
                     align: "left",
                     dataIndex: "Results",
                     renderer: function(value, metaData, record, row, col, store, gridView) {
