@@ -1,0 +1,18 @@
+﻿<Project ToolsVersion="Current">
+  <PropertyGroup>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <ProjectGuid>{2A69A846-7A3C-4752-BA26-91006ABA9BFA}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="header.php" />
+    <None Include="main.php" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="standings\standings.js" />
+  </ItemGroup>
+</Project>

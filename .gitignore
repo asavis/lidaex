@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Web/header.php
+/Web/main.php
+/Web/standings/standings.json
