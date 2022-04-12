@@ -2,8 +2,10 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using FluentFTP;
 using lidaex.Model;
 using lidaex.Model.Lichess;
+using static System.String;
 
 namespace lidaex;
 
@@ -11,6 +13,9 @@ public static class Processor
 {
     private const string ConfigFileName1 = "Конфигурация.txt";
     private const string ConfigFileName2 = @"..\..\..\Конфигурация.txt";
+    private const string UploadConfigFileName1 = "Конфигурация отправки.txt";
+    private const string UploadConfigFileName2 = @"..\..\..\Конфигурация отправки.txt";
+
     private const string OutputFile = "standings.json";
 
     private static readonly IList<PointRule> PointRules = new List<PointRule>();
@@ -20,6 +25,9 @@ public static class Processor
     private static readonly Regex PointRulesTitleRegex = new(@"Правила\s*начисления\s*очков", RegexOptions.IgnoreCase);
     private static readonly Regex PointRulesRegex = new(@"^(?:(.+?)\s*(?:\(s*(.+?)s*\)))\s*:s*(?:\s*([\d.,]+))+$");
     private static readonly Regex LichessTournamentUriRegex = new(@".+/(.+)$", RegexOptions.IgnoreCase);
+    private static readonly Regex HostRegex = new(@"^\s*FTP_Host\s*:\s*(.+?)\s*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+    private static readonly Regex UserRegex = new(@"^\s*User\s*:\s*(.+?)\s*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+    private static readonly Regex PasswordRegex = new(@"^\s*Password\s*:\s*(.+?)\s*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
     private static readonly Regex NewTournamentDefinitionRegex =
         new(@"^\s*Турнир\s*(.+?)\s*\(s*(.+?)s*\)\s*\[s*(.+?)s*\]\s*\:$", RegexOptions.IgnoreCase);
@@ -27,6 +35,10 @@ public static class Processor
     private static TournamentSet? CurrentTournamentSet => TournamentSets.LastOrDefault();
     private static bool IsFirstTournamentSet => TournamentSets.Count < 2;
     private static int NumberOfTournamentsInFirstTournamentSet => TournamentSets.First().NumberOfTournaments;
+
+    private static string UploadHost { get; set; } = Empty;
+    private static string UploadUser { get; set; } = Empty;
+    private static string UploadPassword { get; set; } = Empty;
 
     private static void Main()
     {
@@ -38,12 +50,19 @@ public static class Processor
 
             ParseAndProcess(configFileName);
             WriteResults();
+
+            var uploadConfigFileName = GetFullUploadConfigFileName();
+            if (!IsNullOrEmpty(uploadConfigFileName))
+            {
+                ReadUploadConfig(uploadConfigFileName);
+                if (HaveUserUploadConfirmation()) UploadResults();
+            }
         }
         catch (ApplicationException e)
         {
             Con.Error($"Ошибка: {e.Message}");
         }
-        catch (HttpRequestException e)
+        catch (Exception e)
         {
             Con.Error($"Критическая ошибка: {e}");
         }
@@ -65,6 +84,74 @@ public static class Processor
         throw new ApplicationException("Файл конфигурации не найден");
     }
 
+    private static string GetFullUploadConfigFileName()
+    {
+        var path1 = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, UploadConfigFileName1));
+        var path2 = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, UploadConfigFileName2));
+
+        Con.Info($"Ищем файл конфигурации отправки: \"{path1}\"...");
+
+        if (File.Exists(path1)) return path1;
+
+        Con.Info($"Ищем файл конфигурации отправки: \"{path2}\"...");
+
+        if (File.Exists(path2)) return path2;
+
+        Con.Warn("Файл конфигурации отправки не найден");
+
+        return Empty;
+    }
+
+    private static void ReadUploadConfig(string uploadConfigFileName)
+    {
+        var uploadConfigText = File.ReadAllText(uploadConfigFileName);
+
+        var hostMatch = HostRegex.Match(uploadConfigText);
+        var userMatch = UserRegex.Match(uploadConfigText);
+        var passwordMatch = PasswordRegex.Match(uploadConfigText);
+
+        if (!hostMatch.Success) throw new ApplicationException("Определение FTP_Host не найдено в файле конфигурации отправки");
+        if (!userMatch.Success) throw new ApplicationException("Определение User не найдено в файле конфигурации отправки");
+        if (!passwordMatch.Success) throw new ApplicationException("Определение Password не найдено в файле конфигурации отправки");
+
+        UploadHost = hostMatch.Groups[1].Value;
+        UploadUser = userMatch.Groups[1].Value;
+        UploadPassword = passwordMatch.Groups[1].Value;
+    }
+
+    private static bool HaveUserUploadConfirmation()
+    {
+        if (Con.WarnCounter > 0 || Con.ErrorCounter > 0) Con.Warn("Внимание! Во время обработки данных возникли предупреждения.");
+
+        Con.Info("");
+
+        string? response;
+        do
+        {
+            Con.Info($"Хотите отправить файл данных \"{OutputFile}\" по адресу \"{UploadHost}\"? [д/н]");
+            response = Console.ReadLine()?.ToLower(CultureInfo.CurrentCulture);
+            if (response == "д") return true;
+        } while (response != "н");
+
+        return false;
+    }
+
+    private static void UploadResults()
+    {
+        try
+        {
+            var client = new FtpClient(UploadHost, UploadUser, UploadPassword);
+            client.AutoConnect();
+            client.UploadFile(OutputFile, OutputFile);
+            client.Disconnect();
+        }
+        catch (Exception)
+        {
+            Con.Error($"Ошибка отправки файла \"{OutputFile}\" по адресу \"{UploadHost}\"");
+            throw;
+        }
+    }
+
     private static void ParseAndProcess(string configFileName)
     {
         var curSection = ConfigSections.PointRules;
@@ -81,7 +168,7 @@ public static class Processor
             {
                 var l = line.Trim();
 
-                if (string.IsNullOrWhiteSpace(l) || l.StartsWith("#")) continue;
+                if (IsNullOrWhiteSpace(l) || l.StartsWith("#")) continue;
 
                 if (l.StartsWith("Турнир ", StringComparison.CurrentCultureIgnoreCase))
                 {
@@ -257,7 +344,7 @@ public static class Processor
 
             if (pointRule == null)
                 throw new ApplicationException(
-                    $"Невозможно определить лигу турнира \"{lichessTournament.FullName}\", так как в названии отсутствует один из идентификаторов лиг, описанных в конфигурации: {string.Join('/', PointRules.Select(r => r.Id))}");
+                    $"Невозможно определить лигу турнира \"{lichessTournament.FullName}\", так как в названии отсутствует один из идентификаторов лиг, описанных в конфигурации: {Join('/', PointRules.Select(r => r.Id))}");
 
             foreach (var team in lichessTournament.TeamBattle.Teams)
                 if (!Teams.ContainsKey(team.Key))

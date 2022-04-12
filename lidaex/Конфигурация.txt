@@ -114,3 +114,11 @@ https://lichess.org/tournament/5Z7yx1cG
 https://lichess.org/tournament/O9GilCAW
 https://lichess.org/tournament/6hfrckxS
 https://lichess.org/tournament/CMy5uWW1
+
+
+# Если существует файл "Конфигурация отправки.txt", то по окончании генерации файла данных standings.json 
+# пользователю будет предложена возможность отправить этот файл соглано указанной конфигурации.
+# Пример содержимого файла "Конфигурация отправки.txt":
+# FTP_Host: host
+# User: user
+# Password: password
