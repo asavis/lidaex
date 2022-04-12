@@ -58,7 +58,7 @@ Ext.onReady(function() {
                 {
                     text: "Місце",
                     sortable: true,
-                    width: 75,
+                    width: 60,
                     dataIndex: "Rank",
                     renderer: function(value, metaData, record, row, col, store, gridView) {
                         const rank = record.data["Rank"];
@@ -69,7 +69,6 @@ Ext.onReady(function() {
                 {
                     text: "Команда",
                     flex: 1,
-                    width: 140,
                     sortable: true,
                     dataIndex: "Name",
                     renderer: function(value, metaData, record, row, col, store, gridView) {
@@ -103,22 +102,22 @@ Ext.onReady(function() {
                 {
                     text: "Очки",
                     sortable: true,
-                    width: 100,
+                    width: 65,
                     xtype: "numbercolumn",
                     format: "0.0",
                     align: "right",
                     dataIndex: "Score"
                 },
                 {
-                    text: "Очки Lichess",
+                    text: "Очки<br>Lichess",
                     sortable: true,
-                    width: 100,
+                    width: 65,
                     align: "right",
                     dataIndex: "LichessScore"
                 }
             ],
 
-            height: 500,
+            height: 594,
 
             viewConfig: {
                 stripeRows: true
