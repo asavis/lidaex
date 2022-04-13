@@ -152,6 +152,7 @@ public static class Processor
             client.AutoConnect();
             client.UploadFile(OutputFile, OutputFile);
             client.Disconnect();
+            Con.Info($"Файл \"{OutputFile}\" успешно доставлен адресу \"{UploadHost}\"");
         }
         catch (Exception)
         {
