@@ -42,7 +42,7 @@ public static class Processor
 
     private static void Main(string[] args)
     {
-        var isSilent = args[0] == "/s";
+        var isSilent = args.Length > 0 && args[0] == "/s";
 
         try
         {
