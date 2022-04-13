@@ -40,8 +40,10 @@ public static class Processor
     private static string UploadUser { get; set; } = Empty;
     private static string UploadPassword { get; set; } = Empty;
 
-    private static void Main()
+    private static void Main(string[] args)
     {
+        var isSilent = args[0] == "/s";
+
         try
         {
             Console.OutputEncoding = Encoding.UTF8;
@@ -55,7 +57,7 @@ public static class Processor
             if (!IsNullOrEmpty(uploadConfigFileName))
             {
                 ReadUploadConfig(uploadConfigFileName);
-                if (HaveUserUploadConfirmation()) UploadResults();
+                if (isSilent || HaveUserUploadConfirmation()) UploadResults();
             }
         }
         catch (ApplicationException e)
@@ -65,6 +67,12 @@ public static class Processor
         catch (Exception e)
         {
             Con.Error($"Критическая ошибка: {e}");
+        }
+
+        if (!isSilent)
+        {
+            Con.Info("\nНажмите любую клавишу для выхода...");
+            Console.ReadKey();
         }
     }
 
