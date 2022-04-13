@@ -10,27 +10,15 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{610F6B0C-CA34-4B0B-B922-9774BD170A9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{610F6B0C-CA34-4B0B-B922-9774BD170A9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{610F6B0C-CA34-4B0B-B922-9774BD170A9E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{610F6B0C-CA34-4B0B-B922-9774BD170A9E}.Debug|x86.Build.0 = Debug|Any CPU
 		{610F6B0C-CA34-4B0B-B922-9774BD170A9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{610F6B0C-CA34-4B0B-B922-9774BD170A9E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{610F6B0C-CA34-4B0B-B922-9774BD170A9E}.Release|x86.ActiveCfg = Release|Any CPU
-		{610F6B0C-CA34-4B0B-B922-9774BD170A9E}.Release|x86.Build.0 = Release|Any CPU
 		{2A69A846-7A3C-4752-BA26-91006ABA9BFA}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{2A69A846-7A3C-4752-BA26-91006ABA9BFA}.Debug|Any CPU.Build.0 = Debug|x86
-		{2A69A846-7A3C-4752-BA26-91006ABA9BFA}.Debug|x86.ActiveCfg = Debug|x86
-		{2A69A846-7A3C-4752-BA26-91006ABA9BFA}.Debug|x86.Build.0 = Debug|x86
 		{2A69A846-7A3C-4752-BA26-91006ABA9BFA}.Release|Any CPU.ActiveCfg = Debug|x86
-		{2A69A846-7A3C-4752-BA26-91006ABA9BFA}.Release|Any CPU.Build.0 = Debug|x86
-		{2A69A846-7A3C-4752-BA26-91006ABA9BFA}.Release|x86.ActiveCfg = Debug|x86
-		{2A69A846-7A3C-4752-BA26-91006ABA9BFA}.Release|x86.Build.0 = Debug|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

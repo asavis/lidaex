@@ -5,6 +5,10 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<RepositoryUrl>https://github.com/asavis/lidaex</RepositoryUrl>
+		<NeutralLanguage>ru-UA</NeutralLanguage>
+		<PackageLicenseFile>C:\Projects\lidaex\LICENSE</PackageLicenseFile>
+		<StartupObject>lidaex.Processor</StartupObject>
 	</PropertyGroup>
 
 	<ItemGroup>
