@@ -15,7 +15,6 @@ public static class Processor
     private const string ConfigFileName2 = @"..\..\..\Конфигурация.txt";
     private const string UploadConfigFileName1 = "Конфигурация отправки.txt";
     private const string UploadConfigFileName2 = @"..\..\..\Конфигурация отправки.txt";
-
     private const string OutputFile = "standings.json";
 
     private static readonly IList<PointRule> PointRules = new List<PointRule>();
@@ -35,10 +34,10 @@ public static class Processor
     private static TournamentSet? CurrentTournamentSet => TournamentSets.LastOrDefault();
     private static bool IsFirstTournamentSet => TournamentSets.Count < 2;
     private static int NumberOfTournamentsInFirstTournamentSet => TournamentSets.First().NumberOfTournaments;
-
     private static string UploadHost { get; set; } = Empty;
     private static string UploadUser { get; set; } = Empty;
     private static string UploadPassword { get; set; } = Empty;
+    private static bool UnfinishedTournamentsFound { get; set; }
 
     private static void Main(string[] args)
     {
@@ -51,13 +50,21 @@ public static class Processor
             var configFileName = GetFullConfigFileName();
 
             ParseAndProcess(configFileName);
-            WriteResults();
 
-            var uploadConfigFileName = GetFullUploadConfigFileName();
-            if (!IsNullOrEmpty(uploadConfigFileName))
+            if (UnfinishedTournamentsFound)
             {
-                ReadUploadConfig(uploadConfigFileName);
-                if (isSilent || HaveUserUploadConfirmation()) UploadResults();
+                Con.Warn("Найден один или более неоконченный турнир. Результаты записываться не будут.");
+            }
+            else
+            {
+                WriteResults();
+
+                var uploadConfigFileName = GetFullUploadConfigFileName();
+                if (!IsNullOrEmpty(uploadConfigFileName))
+                {
+                    ReadUploadConfig(uploadConfigFileName);
+                    if (isSilent || HaveUserUploadConfirmation()) UploadResults();
+                }
             }
         }
         catch (ApplicationException e)
@@ -245,7 +252,7 @@ public static class Processor
                 "Ожидалось правило начисления очков. Например: Вища ліга  (D0): 12.0 11.8 11.6 11.4 11.2 11.0 10.8 10.6 10.4 10.2");
 
         var name = match.Groups[1].Value;
-        var id = match.Groups[2].Value.ToLowerInvariant();
+        var id = match.Groups[2].Value.ToUpper(CultureInfo.CurrentCulture);
 
         if (PointRules.Any(x => x.Id == id))
             throw new ApplicationException($"Идентификатор лиги турнира не уникальный: {id}");
@@ -333,7 +340,12 @@ public static class Processor
 
             Con.Info($"{line} {lichessTournament.FullName} {lichessTournament.StartsAt}");
 
-            if (!lichessTournament.IsFinished) throw new ApplicationException("Турнир не окончен");
+            if (!lichessTournament.IsFinished)
+            {
+                UnfinishedTournamentsFound = true;
+                Con.Warn($"Турнир не окончен: \"{line}\"");
+            }
+
             if (lichessTournament.Id == null) throw new ApplicationException("Id отсутствует");
             if (lichessTournament.TeamBattle == null) throw new ApplicationException("TeamBattle отсутствует");
             if (lichessTournament.TeamBattle.Teams == null) throw new ApplicationException("TeamBattle.Teams отсутствует");
