@@ -338,7 +338,7 @@ public static class Processor
         {
             if (lichessTournament == null) throw new ApplicationException("Корень данных отсутствует");
 
-            Con.Info($"{line} {lichessTournament.FullName} {lichessTournament.StartsAt}");
+            Con.Info($"{line} {lichessTournament.FullName} {lichessTournament.StartsAt.ToLocalTime().ToString("g")}");
 
             if (!lichessTournament.IsFinished)
             {
