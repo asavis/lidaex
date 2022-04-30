@@ -29,7 +29,7 @@ public static class Processor
     private static readonly Regex PasswordRegex = new(@"^\s*Password\s*:\s*(.+?)\s*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
     private static readonly Regex NewTournamentDefinitionRegex =
-        new(@"^\s*Турнир\s*(.+?)\s*\(s*(.+?)s*\)\s*\[s*(.+?)s*\]\s*\:$", RegexOptions.IgnoreCase);
+        new(@"^\s*Турнир\s*\(s*(.+?)s*\)\s*\[s*(.+?)s*\]\s*\:$", RegexOptions.IgnoreCase);
 
     private static TournamentSet? CurrentTournamentSet => TournamentSets.LastOrDefault();
     private static bool IsFirstTournamentSet => TournamentSets.Count < 2;
@@ -288,12 +288,12 @@ public static class Processor
         if (!match.Success)
             throw new ApplicationException("Ожидался заголовок турнира. Например: Турнир 1 (97) [2021-12-10]:");
 
-        var name = match.Groups[1].Value;
-        var id = match.Groups[2].Value;
-        var dateString = match.Groups[3].Value;
+        var id = match.Groups[1].Value;
+        var dateString = match.Groups[2].Value;
 
         if (TournamentSets.Any(x => x.Id == id))
             throw new ApplicationException($"Идентификатор тура не уникальный: {id}");
+
 
         DateOnly date;
         try
@@ -307,9 +307,9 @@ public static class Processor
 
         CheckNumberOrTournamentsInTournamentSet();
 
-        TournamentSets.Add(new TournamentSet(name, id, date));
+        TournamentSets.Add(new TournamentSet(id, date));
 
-        Con.Info(CurrentTournamentSet!.ToString());
+        Con.Info($"Турнир {CurrentTournamentSet}");
     }
 
     private static void CheckNumberOrTournamentsInTournamentSet()

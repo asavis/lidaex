@@ -1,119 +1,48 @@
 Правила начисления очков:
-# Названия Турнирниров на lichess должны содержать текст в скобках (т.е. D0/D1/D2/D3) 
-Вища ліга  (D0): 12,0 11,8 11,6 11,4 11,2 11,0 10,8 10,6 10,4 10,2
-Перша ліга (D1): 10,0 9,8 9,6 9,4 9,2 9,0 8,8 8,6 8,4 8,2
-Друга ліга (D2): 8,0 7,8 7,6 7,4 7,2 7,0 6,8 6,6 6,4 6,2
-Третя ліга (D3): 6,0 5,8 5,6 5,4 5,2 5,0 4,8 4,6 4,4 4,2 4,0 3,8 3,6 3,4 3,2 3,0 2,8 2,6 2,4 2,2 2,0 1,8 1,6 1,4 1,2 1,0 0,8 0,6 0,4 0,2 0,0
+# Названия Турнирниров на lichess должны содержать текст в скобках (т.е. Д0/Д1/Д2/Д3) 
+Вища ліга  (Д0): 12,0 11,8 11,6 11,4 11,2 11,0 10,8 10,6 10,4 10,2
+Перша ліга (Д1): 10,0 9,8 9,6 9,4 9,2 9,0 8,8 8,6 8,4 8,2
+Друга ліга (Д2): 8,0 7,8 7,6 7,4 7,2 7,0 6,8 6,6 6,4 6,2
+Третя ліга (Д3): 6,0 5,8 5,6 5,4 5,2 5,0 4,8 4,6 4,4 4,2 4,0 3,8 3,6 3,4 3,2 3,0 2,8 2,6 2,4 2,2 2,0 1,8 1,6 1,4 1,2 1,0 0,8 0,6 0,4 0,2 0,0
 
-Турнир 1 (97) [10.12.2021]:
-# Название Турнирнира на lichess должно содержать текст в скобках (т.е. 97/98...).
+Турнир (114) [15.04.2022]:
+# Название Турнирнира на lichess должно содержать текст в скобках (т.е. 114/115...).
 # Турнирнир на lichess должен проходить в указанную в скобках дату. Иначе пользователь получит предупреждение.
-https://lichess.org/tournament/OfHw11H5
-https://lichess.org/tournament/mUPxudf2
-https://lichess.org/tournament/inb6UZTF
-https://lichess.org/tournament/gzkIivUP
-https://lichess.org/tournament/wifUWAfn
-https://lichess.org/tournament/xeEsW29k
-https://lichess.org/tournament/RQV44vmq
-https://lichess.org/tournament/lOpyLbsF
-https://lichess.org/tournament/3upfPTHB
-https://lichess.org/tournament/rDKVg6be
+# Строки ниже должны заканчивать на "/идентификатор_турнира"
+Вища ліга (Д0) https://lichess.org/tournament/HmbuL8xX
+Перша ліга “A” (Д1-а) https://lichess.org/tournament/hcVZDvvY
+Перша ліга “B”(Д1-b) https://lichess.org/tournament/DTNO2bei
+Перша ліга “C” (Д1-c) https://lichess.org/tournament/Svx3auov
+Друга ліга “A” (Д2-a) https://lichess.org/tournament/DQ1Ux5pP
+Друга ліга “B” (Д2-b) https://lichess.org/tournament/RpFUvzyK
+Друга ліга “C” (Д2-c) https://lichess.org/tournament/9tB2CHeH
+Третя ліга “A” (Д3-a) https://lichess.org/tournament/p3FYD2Gj
+Третя ліга “B” (Д3-b) https://lichess.org/tournament/zXLuecBb
+Третя ліга “C” (Д3-c) https://lichess.org/tournament/xVeSBffu
 
-Турнир 2 (98) [17.12.2021]:
-https://lichess.org/tournament/TDgnkAzw
-https://lichess.org/tournament/XZpiwXDk
-https://lichess.org/tournament/zx7UxRaa
-https://lichess.org/tournament/0e5mebX4
-https://lichess.org/tournament/sVGNelww
-https://lichess.org/tournament/tPXdPr0U
-https://lichess.org/tournament/VQZCG2Bb
-https://lichess.org/tournament/llv4BAfg
-https://lichess.org/tournament/d0IbNsWJ
-https://lichess.org/tournament/8U0ShBTH
+Турнир (115) [22.04.2022]:
+Вища ліга (Д0) https://lichess.org/tournament/qWlZzwFX
+Перша ліга “A” (Д1-а)  https://lichess.org/tournament/FC705IEX
+Перша ліга “B”(Д1-b)  https://lichess.org/tournament/sV7pMcFM
+Перша ліга “C” (Д1-c) https://lichess.org/tournament/rfWaY7Bl
+Друга ліга “A” (Д2-a)  https://lichess.org/tournament/vmghjT2k
+Друга ліга “B” (Д2-b)  https://lichess.org/tournament/GcEgmS64
+Друга ліга “C” (Д2-c)  https://lichess.org/tournament/wrQaUJmu
+Третя ліга “A” (Д3-a)  https://lichess.org/tournament/02BL4X76
+Третя ліга “B” (Д3-b)  https://lichess.org/tournament/miJdT3qK
+Третя ліга “C” (Д3-c)  https://lichess.org/tournament/SH6NSZjy
 
-Турнир 3 (99) [24.12.2021]:
-https://lichess.org/tournament/8YArcSbZ
-https://lichess.org/tournament/ry6OxShn
-https://lichess.org/tournament/kd5r7pb8
-https://lichess.org/tournament/lnVbxdoQ
-https://lichess.org/tournament/P6CDhPi9
-https://lichess.org/tournament/O4vPoqOm
-https://lichess.org/tournament/Ci6or0w0
-https://lichess.org/tournament/HfQYHDR0
-https://lichess.org/tournament/iHxGBnqg
-https://lichess.org/tournament/8MWTlpqq
-
-Турнир 4 (100) [14.01.2022]:
-https://lichess.org/tournament/I8JzoFN7
-https://lichess.org/tournament/59DTZLaT
-https://lichess.org/tournament/mc4E16De
-https://lichess.org/tournament/HWkKOJme
-https://lichess.org/tournament/AebgByMW
-https://lichess.org/tournament/7HYvEnTp
-https://lichess.org/tournament/r7iVqhNh
-https://lichess.org/tournament/CecPee0r
-https://lichess.org/tournament/qlLjObJo
-https://lichess.org/tournament/zgvflpaA
-
-Турнир 5 (101) [21.01.2022]:
-https://lichess.org/tournament/9zMVzRkr
-https://lichess.org/tournament/nJfFWqsW
-https://lichess.org/tournament/WbxKYlDP
-https://lichess.org/tournament/iSxcThqS
-https://lichess.org/tournament/p0mOOvWh
-https://lichess.org/tournament/mCNE9M46
-https://lichess.org/tournament/azzpmgmW
-https://lichess.org/tournament/J4YfKn7T
-https://lichess.org/tournament/NCa8TXgC
-https://lichess.org/tournament/01DeG05p
-
-Турнир 6 (102) [28.01.2022]:
-https://lichess.org/tournament/HbmvrwoC
-https://lichess.org/tournament/uCwwrKj8
-https://lichess.org/tournament/N4SVZy12
-https://lichess.org/tournament/s2LMuNkO
-https://lichess.org/tournament/7k2s6lYR
-https://lichess.org/tournament/iXThpZwz
-https://lichess.org/tournament/pzJkNU3G
-https://lichess.org/tournament/I4cqcFCH
-https://lichess.org/tournament/oL3WOW5r
-https://lichess.org/tournament/ZpR35v5U
-
-Турнир 7 (103) [04.02.2022]:
-https://lichess.org/tournament/2P8ekDMc
-https://lichess.org/tournament/tfgkAmCO
-https://lichess.org/tournament/hVxf5VNB
-https://lichess.org/tournament/GleWd6Wu
-https://lichess.org/tournament/WiSuGnI5
-https://lichess.org/tournament/7WVx1F2W
-https://lichess.org/tournament/JnQA0gmG
-https://lichess.org/tournament/c4ON47O5
-https://lichess.org/tournament/xd2DQrm9
-https://lichess.org/tournament/YCfk1C7F
-
-Турнир 8 (104) [11.02.2022]:
-https://lichess.org/tournament/qGzar9zf
-https://lichess.org/tournament/iZWOcxHD
-https://lichess.org/tournament/rSXOqbCg
-https://lichess.org/tournament/PsS1zW8L
-https://lichess.org/tournament/6dqDWMDB
-https://lichess.org/tournament/PdiDRnGj
-https://lichess.org/tournament/T2sClxnI
-https://lichess.org/tournament/BT8sqj7l
-https://lichess.org/tournament/qjDMODVP
-https://lichess.org/tournament/5bSyqdZA
-
-Турнир 9 (105) [18.02.2022]:
-https://lichess.org/tournament/PQJesky8
-https://lichess.org/tournament/8NJK8Zjb
-https://lichess.org/tournament/o0gjbxMZ
-https://lichess.org/tournament/JUAgANkA
-https://lichess.org/tournament/1XdtzxTH
-https://lichess.org/tournament/9Puj8X6j
-https://lichess.org/tournament/5Z7yx1cG
-https://lichess.org/tournament/O9GilCAW
-https://lichess.org/tournament/6hfrckxS
-https://lichess.org/tournament/CMy5uWW1
+Турнир (116) [29.04.2022]:
+Вища ліга (Д0) https://lichess.org/tournament/vT5Nox4z
+Перша ліга “A” (Д1-а) https://lichess.org/tournament/zbQrd4d6
+Перша ліга “B”(Д1-b) https://lichess.org/tournament/iYSIRRGY
+Перша ліга “C” (Д1-c) https://lichess.org/tournament/jjt4alt7
+Друга ліга “A” (Д2-a) https://lichess.org/tournament/o4wHIs5i
+Друга ліга “B” (Д2-b) https://lichess.org/tournament/HkNTEvPn
+Друга ліга “C” (Д2-c) https://lichess.org/tournament/WFkffLXS
+Третя ліга “A” (Д3-a) https://lichess.org/tournament/OpBZBtIt
+Третя ліга “B” (Д3-b) https://lichess.org/tournament/5f1NS0Ct
+Третя ліга “C” (Д3-c) https://lichess.org/tournament/HedQyeNc
 
 
 # Если существует файл "Конфигурация отправки.txt", то по окончании генерации файла данных standings.json 
@@ -122,3 +51,6 @@ https://lichess.org/tournament/CMy5uWW1
 # FTP_Host: host
 # User: user
 # Password: password
+
+
+
