@@ -41,7 +41,7 @@ public static class Processor
 
     private static void Main(string[] args)
     {
-        var isSilent = args.Length > 0 && args[0] == "/s";//test commit
+        var isSilent = args.Length > 0 && args[0] == "/s";
 
         try
         {
