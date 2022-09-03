@@ -42,6 +42,7 @@ public static class Processor
     private static void Main(string[] args)
     {
         var isSilent = args.Length > 0 && args[0] == "/s";
+        var isUploadOnlyMode = args.Length > 0 && args[0] == "/u";
 
         try
         {
@@ -49,7 +50,7 @@ public static class Processor
 
             var configFileName = GetFullConfigFileName();
 
-            ParseAndProcess(configFileName);
+            if (!isUploadOnlyMode) ParseAndProcess(configFileName);
 
             if (UnfinishedTournamentsFound)
             {
@@ -57,7 +58,7 @@ public static class Processor
             }
             else
             {
-                WriteResults();
+                if (!isUploadOnlyMode) WriteResults();
 
                 var uploadConfigFileName = GetFullUploadConfigFileName();
                 if (!IsNullOrEmpty(uploadConfigFileName))
@@ -155,10 +156,30 @@ public static class Processor
     {
         try
         {
+            Con.Info($"Отправляем файл данных \"{OutputFile}\" по адресу \"{UploadHost}\"...");
+
             var client = new FtpClient(UploadHost, UploadUser, UploadPassword);
             client.AutoConnect();
-            client.UploadFile(OutputFile, OutputFile);
+
+            int nextProgressLog = 10;
+            const int progressLogStep = 10;
+
+            client.UploadFile(OutputFile, 
+                OutputFile, 
+                FtpRemoteExists.Overwrite,
+                false,
+                FtpVerify.None,
+                delegate(FtpProgress progress)
+                {
+                    if (progress.Progress > nextProgressLog)
+                    {
+                        Con.Info($"{nextProgressLog}%");
+                        nextProgressLog += progressLogStep;
+                    }
+                });
+
             client.Disconnect();
+            Con.Info("100%");
             Con.Info($"Файл \"{OutputFile}\" успешно доставлен по адресу \"{UploadHost}\"");
         }
         catch (Exception)
