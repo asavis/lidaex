@@ -161,11 +161,11 @@ public static class Processor
             var client = new FtpClient(UploadHost, UploadUser, UploadPassword);
             client.AutoConnect();
 
-            int nextProgressLog = 10;
+            var nextProgressLog = 10;
             const int progressLogStep = 10;
 
-            client.UploadFile(OutputFile, 
-                OutputFile, 
+            client.UploadFile(OutputFile,
+                OutputFile,
                 FtpRemoteExists.Overwrite,
                 false,
                 FtpVerify.None,
@@ -254,7 +254,7 @@ public static class Processor
 
         try
         {
-            File.WriteAllText(OutputFile, JsonSerializer.Serialize(orderedTeams, new JsonSerializerOptions {WriteIndented = true}));
+            File.WriteAllText(OutputFile, JsonSerializer.Serialize(orderedTeams, new JsonSerializerOptions { WriteIndented = true }));
         }
         catch (Exception e)
         {
@@ -448,11 +448,33 @@ public static class Processor
                 $"Невозможно разобрать информацию о турнире полученную по ссылке \"{uri}\": {e.Message}", e);
         }
 
+        if (lichessTournament is { TeamBattle: { Teams.Count: > 10 } })
+        {
+            uri += "/teams";
+
+            try
+            {
+                lichessTournament.TeamStanding = JsonSerializer.Deserialize<TeamsRoot>(httpClient.GetStreamAsync(uri).Result)!.TeamStanding;
+            }
+            catch (HttpRequestException e)
+            {
+                throw new ApplicationException($"Невозможно получить информацию о командах турнира по ссылке \"{uri}\": {e.Message}",
+                    e);
+            }
+            catch (JsonException e)
+            {
+                throw new ApplicationException(
+                    $"Невозможно разобрать информацию командах турнира полученную по ссылке \"{uri}\": {e.Message}", e);
+            }
+        }
+
         return lichessTournament;
     }
 
     private static decimal ApplyPointRule(PointRule pointRule, TeamStanding teamStanding)
     {
+        if (teamStanding.Score == 0) return 0;
+
         if (teamStanding.Rank < 1)
             throw new ApplicationException($"Неверное место команды \"{teamStanding.Id}\" в данных lichess: {teamStanding.Rank}");
 

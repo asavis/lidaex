@@ -174,3 +174,8 @@ public class Root
 
     [JsonPropertyName("description")] public string? Description { get; set; }
 }
+
+public class TeamsRoot
+{
+    [JsonPropertyName("teams")] public List<TeamStanding>? TeamStanding { get; set; }
+}
