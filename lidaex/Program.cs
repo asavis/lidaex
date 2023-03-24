@@ -41,8 +41,8 @@ public static class Processor
 
     private static void Main(string[] args)
     {
-        var isSilent = args.Length > 0 && args[0] == "/s";
-        var isUploadOnlyMode = args.Length > 0 && args[0] == "/u";
+        var isSilent = (args.Length > 0 && args[0] == "/s") || (args.Length > 1 && args[1] == "/s");
+        var isUploadOnlyMode = (args.Length > 0 && args[0] == "/u") || (args.Length > 1 && args[1] == "/u");
 
         try
         {
@@ -159,7 +159,7 @@ public static class Processor
             Con.Info($"Отправляем файл данных \"{OutputFile}\" по адресу \"{UploadHost}\"...");
 
             var client = new FtpClient(UploadHost, UploadUser, UploadPassword);
-            client.AutoConnect();
+            client.Connect();
 
             var nextProgressLog = 10;
             const int progressLogStep = 10;
@@ -168,7 +168,7 @@ public static class Processor
                 OutputFile,
                 FtpRemoteExists.Overwrite,
                 false,
-                FtpVerify.None,
+                FtpVerify.Retry,
                 delegate(FtpProgress progress)
                 {
                     if (progress.Progress > nextProgressLog)

@@ -5,44 +5,45 @@
 Друга ліга (Д2): 8,0 7,8 7,6 7,4 7,2 7,0 6,8 6,6 6,4 6,2
 Третя ліга (Д3): 6,0 5,8 5,6 5,4 5,2 5,0 4,8 4,6 4,4 4,2 4,0 3,8 3,6 3,4 3,2 3,0 2,8 2,6 2,4 2,2 2,0 1,8 1,6 1,4 1,2 1,0 0,8 0,6 0,4 0,2 0,0
 
-Турнир (114) [15.04.2022]:
+Турнир (130) [09.09.2022]:
 # Название Турнирнира на lichess должно содержать текст в скобках (т.е. 114/115...).
 # Турнирнир на lichess должен проходить в указанную в скобках дату. Иначе пользователь получит предупреждение.
 # Строки ниже должны заканчивать на "/идентификатор_турнира"
-Вища ліга (Д0) https://lichess.org/tournament/HmbuL8xX
-Перша ліга “A” (Д1-а) https://lichess.org/tournament/hcVZDvvY
-Перша ліга “B”(Д1-b) https://lichess.org/tournament/DTNO2bei
-Перша ліга “C” (Д1-c) https://lichess.org/tournament/Svx3auov
-Друга ліга “A” (Д2-a) https://lichess.org/tournament/DQ1Ux5pP
-Друга ліга “B” (Д2-b) https://lichess.org/tournament/RpFUvzyK
-Друга ліга “C” (Д2-c) https://lichess.org/tournament/9tB2CHeH
-Третя ліга “A” (Д3-a) https://lichess.org/tournament/p3FYD2Gj
-Третя ліга “B” (Д3-b) https://lichess.org/tournament/zXLuecBb
-Третя ліга “C” (Д3-c) https://lichess.org/tournament/xVeSBffu
+Вища ліга (Д0)  https://lichess.org/tournament/BQlvSUus
+Перша ліга “A” (Д1-а)  https://lichess.org/tournament/jsz8JyD8
+Перша ліга “B”(Д1-b)  https://lichess.org/tournament/UkhK7Ioi
+Перша ліга “C” (Д1-c)  https://lichess.org/tournament/u74mOKSI
+Друга ліга “A” (Д2-a)   https://lichess.org/tournament/BYuRYivp
+Друга ліга “B” (Д2-b)   https://lichess.org/tournament/wEgpPRbJ
+Друга ліга “C” (Д2-c)   https://lichess.org/tournament/QE7VlRnV
+Третя ліга “A” (Д3-a)   https://lichess.org/tournament/Dm0mhnJh
+Третя ліга “B” (Д3-b)   https://lichess.org/tournament/EN5s1sfc
+Третя ліга “C” (Д3-c)   https://lichess.org/tournament/bgoNmyP7
 
-Турнир (115) [22.04.2022]:
-Вища ліга (Д0) https://lichess.org/tournament/qWlZzwFX
-Перша ліга “A” (Д1-а)  https://lichess.org/tournament/FC705IEX
-Перша ліга “B”(Д1-b)  https://lichess.org/tournament/sV7pMcFM
-Перша ліга “C” (Д1-c) https://lichess.org/tournament/rfWaY7Bl
-Друга ліга “A” (Д2-a)  https://lichess.org/tournament/vmghjT2k
-Друга ліга “B” (Д2-b)  https://lichess.org/tournament/GcEgmS64
-Друга ліга “C” (Д2-c)  https://lichess.org/tournament/wrQaUJmu
-Третя ліга “A” (Д3-a)  https://lichess.org/tournament/02BL4X76
-Третя ліга “B” (Д3-b)  https://lichess.org/tournament/miJdT3qK
-Третя ліга “C” (Д3-c)  https://lichess.org/tournament/SH6NSZjy
+Турнир (131) [16.09.2022]:
+Вища ліга (Д0) https://lichess.org/tournament/tl30AAjC
+Перша ліга “A” (Д1-а) https://lichess.org/tournament/fihOM8uJ
+Перша ліга “B”(Д1-b) https://lichess.org/tournament/ZDcVsrPJ
+Перша ліга “C” (Д1-c) https://lichess.org/tournament/Og1U2Cm8
+Друга ліга “A” (Д2-a) https://lichess.org/tournament/IpZq3gBn
+Друга ліга “B” (Д2-b) https://lichess.org/tournament/jAFf1K1O
+Друга ліга “C” (Д2-c) https://lichess.org/tournament/ULsThKVM
+Третя ліга “A” (Д3-a) https://lichess.org/tournament/tKEvz2n5
+Третя ліга “B” (Д3-b) https://lichess.org/tournament/7bd4lfMj
+Третя ліга “C” (Д3-c) https://lichess.org/tournament/8gzSwT5Y
 
-Турнир (116) [29.04.2022]:
-Вища ліга (Д0) https://lichess.org/tournament/vT5Nox4z
-Перша ліга “A” (Д1-а) https://lichess.org/tournament/zbQrd4d6
-Перша ліга “B”(Д1-b) https://lichess.org/tournament/iYSIRRGY
-Перша ліга “C” (Д1-c) https://lichess.org/tournament/jjt4alt7
-Друга ліга “A” (Д2-a) https://lichess.org/tournament/o4wHIs5i
-Друга ліга “B” (Д2-b) https://lichess.org/tournament/HkNTEvPn
-Друга ліга “C” (Д2-c) https://lichess.org/tournament/WFkffLXS
-Третя ліга “A” (Д3-a) https://lichess.org/tournament/OpBZBtIt
-Третя ліга “B” (Д3-b) https://lichess.org/tournament/5f1NS0Ct
-Третя ліга “C” (Д3-c) https://lichess.org/tournament/HedQyeNc
+Турнир (132) [23.09.2022]:
+Вища ліга (Д0)  https://lichess.org/tournament/8cuIMaKl
+Перша ліга “A” (Д1-а)  https://lichess.org/tournament/1SEKJZ0l
+Перша ліга “B”(Д1-b)  https://lichess.org/tournament/7ajRrK4L
+Перша ліга “C” (Д1-c)  https://lichess.org/tournament/Lqn4knES
+Друга ліга “A” (Д2-a)   https://lichess.org/tournament/6ekSyglD
+Друга ліга “B” (Д2-b)   https://lichess.org/tournament/6BZBCxdA
+Друга ліга “C” (Д2-c)   https://lichess.org/tournament/KzI3hSMg
+Третя ліга “A” (Д3-a)   https://lichess.org/tournament/vwOVIBWx
+Третя ліга “B” (Д3-b)   https://lichess.org/tournament/Z6TFplnI
+Третя ліга “C” (Д3-c)   https://lichess.org/tournament/XgtmcRfg
+
 
 
 # Если существует файл "Конфигурация отправки.txt", то по окончании генерации файла данных standings.json 
