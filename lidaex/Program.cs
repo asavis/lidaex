@@ -23,7 +23,7 @@ public static class Processor
 
     private static readonly Regex PointRulesTitleRegex = new(@"Правила\s*нарахування\s*очок", RegexOptions.IgnoreCase);
     private static readonly Regex PointRulesRegex = new(@"^(?:(.+?)\s*(?:\(s*(.+?)s*\)))\s*:s*(?:\s*([\d.,]+))+$");
-    private static readonly Regex LichessTournamentUriRegex = new(@".+/(.+)$", RegexOptions.IgnoreCase);
+    private static readonly Regex LichessTournamentUriRegex = new(".+/(.+)$", RegexOptions.IgnoreCase);
     private static readonly Regex HostRegex = new(@"^\s*FTP_Host\s*:\s*(.+?)\s*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
     private static readonly Regex UserRegex = new(@"^\s*User\s*:\s*(.+?)\s*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
     private static readonly Regex PasswordRegex = new(@"^\s*Password\s*:\s*(.+?)\s*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
@@ -245,7 +245,7 @@ public static class Processor
 
     private static void WriteResults()
     {
-        Con.Info($"Підготовлюємо і записуємо \"{OutputFile}\"...");
+        Con.Info($"Підготовлюємо та записуємо \"{OutputFile}\"...");
 
         var orderedTeams = Teams.Values.OrderByDescending(x => x.Score).ThenByDescending(c => c.LichessScore).ToList();
 
@@ -361,7 +361,7 @@ public static class Processor
         {
             if (lichessTournament == null) throw new ApplicationException("Корінь даних відсутній");
 
-            Con.Info($"{line} {lichessTournament.FullName} {lichessTournament.StartsAt.ToLocalTime().ToString("g")}");
+            Con.Info($"{line} {lichessTournament.FullName} {lichessTournament.StartsAt.ToLocalTime():g}");
 
             if (!lichessTournament.IsFinished)
             {
@@ -387,12 +387,25 @@ public static class Processor
                 PointRules.FirstOrDefault(x => lichessTournament.FullName.Contains(x.Id, StringComparison.CurrentCultureIgnoreCase));
 
             if (pointRule == null)
-                throw new ApplicationException(
-                    $"Неможливо визначити лігу турніру \"{lichessTournament.FullName}\", так як у назві відсутній один з ідентифікаторів ліг, описаних у конфігурації: {Join('/', PointRules.Select(r => r.Id))}");
+            {
+                pointRule =
+                    PointRules.FirstOrDefault(x => lichessTournament.FullName.Contains(
+                        x.Id.Substring(0, 1) + 
+                        "-" + 
+                        x.Id.Substring(1), StringComparison.CurrentCultureIgnoreCase));
+
+                if (pointRule == null)
+                {
+                    throw new ApplicationException(
+                        $"Неможливо визначити лігу турніру \"{lichessTournament.FullName}\", так як у назві відсутній один з ідентифікаторів ліг, описаних у конфігурації: {Join('/', PointRules.Select(r => r.Id))}");
+                }
+
+                Con.Warn($"Тимчасове рішення використано! Визначена ліга: \"{pointRule.Name}\". Ідентифікатор ліги має бути одним із описаних у конфігурації: {Join('/', PointRules.Select(r => r.Id))}");
+            }
 
             foreach (var team in lichessTournament.TeamBattle.Teams)
                 if (!Teams.ContainsKey(team.Key))
-                    Teams.Add(team.Key, new Team(team.Key, team.Value));
+                    Teams.Add(team.Key, new Team(team.Key, team.Value.First())); 
 
             foreach (var teamStanding in lichessTournament.TeamStanding)
             {
@@ -451,7 +464,7 @@ public static class Processor
                 $"Неможливо розібрати інформацію про турнір, отриману за посиланням \"{uri}\": {e.Message}", e);
         }
 
-        if (lichessTournament is { TeamBattle: { Teams.Count: > 10 } })
+        if (lichessTournament is { TeamBattle.Teams.Count: > 10 })
         {
             uri += "/teams";
 

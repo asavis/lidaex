@@ -123,7 +123,7 @@ public class Verdicts
 
 public class TeamBattle
 {
-    [JsonPropertyName("teams")] public IDictionary<string, string>? Teams { get; set; }
+    [JsonPropertyName("teams")] public IDictionary<string, List<string>>? Teams { get; set; }
 }
 
 public class Root
