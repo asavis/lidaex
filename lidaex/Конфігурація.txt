@@ -51,5 +51,5 @@
 # User: user
 # Password: password
 
-# Copyright 2024 Alexander Stasiv
+
 
