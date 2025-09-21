@@ -8,11 +8,12 @@
     <ProjectGuid>{2A69A846-7A3C-4752-BA26-91006ABA9BFA}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="header.php" />
-    <None Include="main.php" />
+    <None Include="prod\header.php" />
+    <None Include="prod\main.php" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <Content Include="dev\index.html" />
     <Content Include="standings\standings.js" />
   </ItemGroup>
+  <ItemGroup />
 </Project>
