@@ -367,3 +367,5 @@ FodyWeavers.xsd
 /lidaex/Конфигурация отправки.txt
 /lidaex/Конфігурація відправлення.txt
 /Web/prod
+/Web/index.html
+/Web/dev/index.html
