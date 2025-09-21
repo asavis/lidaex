@@ -1,5 +1,5 @@
 ﻿/*
- *   Usage:
+ * Usage:
  *
  *   <link rel="stylesheet" type="text/css" href="https://cdn.sencha.com/ext/gpl/4.2.1/resources/ext-theme-neptune/ext-theme-neptune-all.css"/>
  *   <script type="text/javascript" src="https://cdn.sencha.com/ext/gpl/4.2.1/ext-all.js"></script>
@@ -25,9 +25,46 @@ var RanksIcons = [
 
 Ext.override(Ext.grid.View, { enableTextSelection: true });
 
-Ext.onReady(function () {
-
+function InitTooltips() {
     Ext.QuickTips.init();
+
+    var host = Ext.get('extjs_grid'); if (!host) return;
+
+    var probe = Ext.getBody().createChild({
+        tag: 'div',
+        cls: 'x-tip-body-default',
+        style: 'position:absolute;left:-10000px;top:-10000px;visibility:hidden;' +
+            'white-space:normal;word-break:break-word;line-height:1.25;'
+    });
+
+    function measure(html, minW, maxW) {
+        probe.update(html || '');
+        probe.setStyle('width', 'auto');
+        var w = probe.dom.offsetWidth;
+        if (w < minW) w = minW;
+        if (w > maxW) w = maxW;
+        return w;
+    }
+
+    var tip = Ext.create('Ext.tip.ToolTip', {
+        target: host,
+        delegate: 'span[data-comment]'
+    });
+
+    tip.on('beforeshow', function (t) {
+        var el = t.triggerElement;
+        if (!el) return false;
+
+        var raw = el.getAttribute('data-comment') || '';
+        t.update(raw);
+
+        var w = measure(raw, t.minWidth, t.maxWidth);
+        t.setWidth(w);
+    });
+}
+
+Ext.onReady(function () {
+    InitTooltips();
 
     Ext.define("StandingsModel", {
         extend: "Ext.data.Model",
@@ -41,7 +78,7 @@ Ext.onReady(function () {
         ]
     });
 
-    const store = Ext.create("Ext.data.Store", {
+    var store = Ext.create("Ext.data.Store", {
         model: "StandingsModel",
         proxy: {
             type: "ajax",
@@ -51,11 +88,10 @@ Ext.onReady(function () {
         autoLoad: true
     });
 
-    const grid = Ext.create("Ext.grid.Panel", {
+    var grid = Ext.create("Ext.grid.Panel", {
+        renderTo: "extjs_grid",
         store: store,
-
         forceFit: true,
-
         height: 594,
         border: 1,
 
@@ -66,28 +102,28 @@ Ext.onReady(function () {
                 width: 60,
                 dataIndex: "Rank",
                 renderer: function (value, metaData, record) {
-                    const rank = record.data["Rank"];
+                    var rank = record.data["Rank"];
                     if (rank > 3) return value;
                     return value + ' <img src="' + RanksIcons[rank - 1] + '" width="22" alt="rank ' + rank + '" style="float:right" />';
                 }
             },
             {
-                text: "Команда",
-                flex: 1,
-                minWidth: 220,
+                text: "Команда",                
+                width: 220,
                 sortable: true,
                 dataIndex: "Name",
                 renderer: function (value, metaData, record) {
                     metaData.tdStyle = "white-space:nowrap;overflow:hidden;text-overflow:ellipsis;";
-                    const name = Ext.String.htmlEncode(value || "");
+                    var name = Ext.String.htmlEncode(value || "");
                     metaData.tdAttr = 'data-qtip="' + name + '"';
-                    const id = encodeURIComponent(record.data["Id"] || "");
+                    var id = encodeURIComponent(record.data["Id"] || "");
                     return '<a href="https://lichess.org/team/' + id + '" target="_blank" rel="noopener">' + name + '</a>';
                 }
             },
             {
                 text: "Турніри",
-                width: 220, 
+                flex: 1,
+                
                 minWidth: 160,
                 sortable: false,
                 align: "left",
@@ -96,31 +132,37 @@ Ext.onReady(function () {
                     metaData.tdStyle = "white-space:nowrap;overflow:hidden;text-overflow:ellipsis;";
                     if (!Ext.isArray(value) || value.length === 0) return "";
 
-                    let txt = "";
-                    for (let i = 0; i < value.length; i++) {
-                        const item = value[i] || {};
+                    var txt = "";
+                    for (var i = 0; i < value.length; i++) {
+                        var item = value[i] || {};
+
                         if (i !== 0) {
-                            txt += (item.ResultType === "adjustment" && typeof item.Value === "number")
-                                ? (item.Value >= 0 ? " + " : " ")
-                                : " + ";
-                        }
-                        if (item.ResultType === "adjustment") {
-                            const comment = Ext.String.htmlEncode(item.Comment || "");
-                            const valText = (typeof item.Value === "number")
-                                ? ((item.Value > 0 ? "+" : "") + item.Value)
-                                : Ext.String.htmlEncode(String(item.Value || ""));
-                            txt += '<span style="color:red;" data-qtip="' + comment + '">' + valText + '</span>';
-                            continue;
+                            if (item.LichessTournamentId === "adjustment" && typeof item.Score === "number") {     
+                                sign = item.Score >= 0 ? " + " : " - ";
+                                txt += '<span style="color:red;">' + sign + '</span>'; ;
+                            } else {         
+                                txt += " + ";
+                            }
                         }
 
-                        const d = item.TournamentDate ? new Date(item.TournamentDate) : null;
-                        const dText = (d && !isNaN(d.getTime())) ? Ext.Date.format(d, "d.m.Y") : "";
-                        const league = Ext.String.htmlEncode(item.LeagueName || "");
-                        const rankText = (item.Rank != null) ? String(item.Rank) : "";
-                        const tip = ('[' + rankText + '] ' + league + ' ' + dText).split(' ').join('&nbsp;');
-                        const qtip = Ext.String.htmlEncode(tip);
-                        const lichessId = encodeURIComponent(item.LichessTournamentId || "");
-                        const scoreText = (item.Score != null) ? String(item.Score) : "";
+                        if (item.LichessTournamentId === "adjustment") {
+                            var comment = String(item.LeagueName || '');
+                            var valText = Ext.util.Format.number(Math.abs(item.Score || 0), "0.##");
+
+                            if (item.LichessTournamentId === "adjustment") {
+                                txt += '<span style="color:red;" data-comment="' + comment + '">' + valText + '</span>';
+                                continue;
+                            }
+                        }
+
+                        var d = item.TournamentDate ? new Date(item.TournamentDate) : null;
+                        var dText = (d && !isNaN(d.getTime())) ? Ext.Date.format(d, "d.m.Y") : "";
+                        var league = Ext.String.htmlEncode(item.LeagueName || "");
+                        var rankText = (item.Rank != null) ? String(item.Rank) : "";
+                        var tip = ('[' + rankText + '] ' + league + ' ' + dText).split(' ').join('&nbsp;');
+                        var qtip = Ext.String.htmlEncode(tip);
+                        var lichessId = encodeURIComponent(item.LichessTournamentId || "");
+                        var scoreText = (item.Score != null) ? String(item.Score) : "";
                         txt += '<a href="https://lichess.org/tournament/' + lichessId + '" target="_blank" rel="noopener" data-qtip="' + qtip + '">' + scoreText + '</a>';
                     }
                     return txt;
@@ -147,8 +189,6 @@ Ext.onReady(function () {
 
         viewConfig: {
             stripeRows: true
-        },
-
-        renderTo: "extjs_grid"
+        }
     });
 });
