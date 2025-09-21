@@ -221,13 +221,23 @@ public static class Processor
                     continue;
                 }
 
-                switch (curSection)
+                if (l.StartsWith("Бонуси та штрафи:", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    Con.Info(l);
+                    curSection = ConfigSections.Adjustments;
+                    continue;
+                }
+
+                 switch (curSection)
                 {
                     case ConfigSections.PointRules:
                         ParseAndProcessPointRules(l);
                         break;
                     case ConfigSections.Tournaments:
                         ParseAndProcessTournament(l);
+                        break;
+                    case ConfigSections.Adjustments:
+                        ParseAndProcessAdjustments(l);
                         break;
                     default:
                         throw new ApplicationException($"Невідомо, як обробляти секцію {curSection}");
@@ -504,6 +514,46 @@ public static class Processor
     private enum ConfigSections
     {
         PointRules,
-        Tournaments
+        Tournaments,
+        Adjustments
     }
+
+    private static void ParseAndProcessAdjustments(string line)
+    {
+        var rx = new Regex(
+            @"^(?<team>(?:(?!\[\s*[+-](?:\d+(?:[.,]\d+)?|[.,]\d+)\s*\]).)+?)\s*\[\s*(?<delta>[+-](?:\d+(?:[.,]\d+)?|[.,]\d+))\s*\]\s*(?<comment>.*)$",
+            RegexOptions.CultureInvariant | RegexOptions.Singleline);
+
+        var m = rx.Match(line);
+        if (!m.Success)
+            throw new ApplicationException(
+                "Невірний формат рядка для бонусів/штрафів. Очікується: НазваКоманди [+5.5] Коментар");
+
+        var teamName = m.Groups["team"].Value.Trim();
+        var deltaRaw = m.Groups["delta"].Value.Trim().Replace(',', '.');
+
+        if (!decimal.TryParse(deltaRaw, NumberStyles.Float, CultureInfo.InvariantCulture, out var delta))
+            throw new ApplicationException($"Неможливо розібрати число \"{m.Groups["delta"].Value}\"");
+
+        var comment = m.Groups["comment"].Value.Trim();
+
+        var team = Teams.Values.FirstOrDefault(t => string.Equals(t.Name, teamName, StringComparison.CurrentCultureIgnoreCase));
+        if (team == null && !Teams.TryGetValue(teamName, out team))
+            throw new ApplicationException($"Команду не знайдено серед учасників турнірів: \"{teamName}\"");
+
+        team.Score += delta;
+
+        team.Results.Add(new TeamTournamentResult(
+            LichessTournamentId: "adjustment",
+            TournamentSetId: string.Empty,
+            Rank: -1,
+            Score: delta,
+            LichessScore: 0,
+            LeagueName: comment,
+            TournamentDate: DateTime.MinValue
+        ));
+
+        Con.Info($"{team.Name}: {(delta >= 0 ? "+" : "")}{delta} {(string.IsNullOrWhiteSpace(comment) ? "" : "- " + comment)}");
+    }
+
 }
