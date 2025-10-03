@@ -1,10 +1,10 @@
-﻿using System.Globalization;
+﻿using FluentFTP;
+using lidaex.Model;
+using lidaex.Model.Lichess;
+using System.Globalization;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using FluentFTP;
-using lidaex.Model;
-using lidaex.Model.Lichess;
 using static System.String;
 
 namespace lidaex;
@@ -22,15 +22,12 @@ public static class Processor
     private static readonly IDictionary<string, Team> Teams = new Dictionary<string, Team>();
 
     private static readonly Regex PointRulesTitleRegex = new(@"Правила\s*нарахування\s*очок", RegexOptions.IgnoreCase);
-    private static readonly Regex PointRulesRegex = new(@"^(?:(.+?)\s*(?:\(s*(.+?)s*\)))\s*:s*(?:\s*([\d.,]+))+$");
-    private static readonly Regex LichessTournamentUriRegex = new(".+/(.+)$", RegexOptions.IgnoreCase);
+    private static readonly Regex PointRulesRegex = new(@"^(?:(.+?)\s*\(\s*(.+?)\s*\))\s*:\s*((?:[\d.,]+\s*)+)$");
+    private static readonly Regex LichessTournamentUriRegex = new(@"https?://lichess\.org/tournament/([A-Za-z0-9]{8})", RegexOptions.IgnoreCase);
     private static readonly Regex HostRegex = new(@"^\s*FTP_Host\s*:\s*(.+?)\s*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
     private static readonly Regex UserRegex = new(@"^\s*User\s*:\s*(.+?)\s*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
     private static readonly Regex PasswordRegex = new(@"^\s*Password\s*:\s*(.+?)\s*$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-
-    private static readonly Regex NewTournamentDefinitionRegex =
-        new(@"^\s*Турнір\s*\(s*(.+?)s*\)\s*\[s*(.+?)s*\]\s*\:$", RegexOptions.IgnoreCase);
-
+    private static readonly Regex NewTournamentDefinitionRegex = new(@"^\s*Турнір\s*\(\s*(.+?)\s*\)\s*\[\s*(.+?)\s*\]\s*:$", RegexOptions.IgnoreCase);
     private static TournamentSet? CurrentTournamentSet => TournamentSets.LastOrDefault();
     private static bool IsFirstTournamentSet => TournamentSets.Count < 2;
     private static int NumberOfTournamentsInFirstTournamentSet => TournamentSets.First().NumberOfTournaments;
@@ -145,7 +142,7 @@ public static class Processor
         do
         {
             Con.Info($"Бажаєте відправити файл даних \"{OutputFile}\" за адресою \"{UploadHost}\"? [т/н]");
-            response = Console.ReadLine()?.ToLower(CultureInfo.CurrentCulture);
+            response = Console.ReadLine()?.ToLower(CultureInfo.InvariantCulture);
             if (response == "т") return true;
         } while (response != "н");
 
@@ -169,7 +166,7 @@ public static class Processor
                 FtpRemoteExists.Overwrite,
                 false,
                 FtpVerify.Retry,
-                delegate(FtpProgress progress)
+                delegate (FtpProgress progress)
                 {
                     if (progress.Progress > nextProgressLog)
                     {
@@ -207,7 +204,7 @@ public static class Processor
 
                 if (IsNullOrWhiteSpace(l) || l.StartsWith("#")) continue;
 
-                if (l.StartsWith("Турнір ", StringComparison.CurrentCultureIgnoreCase))
+                if (l.StartsWith("Турнір ", StringComparison.InvariantCultureIgnoreCase))
                 {
                     CheckIfHavePointRules();
 
@@ -221,14 +218,14 @@ public static class Processor
                     continue;
                 }
 
-                if (l.StartsWith("Бонуси та штрафи:", StringComparison.CurrentCultureIgnoreCase))
+                if (l.StartsWith("Бонуси та штрафи:", StringComparison.InvariantCultureIgnoreCase))
                 {
                     Con.Info(l);
                     curSection = ConfigSections.Adjustments;
                     continue;
                 }
 
-                 switch (curSection)
+                switch (curSection)
                 {
                     case ConfigSections.PointRules:
                         ParseAndProcessPointRules(l);
@@ -264,7 +261,10 @@ public static class Processor
 
         try
         {
-            File.WriteAllText(OutputFile, JsonSerializer.Serialize(orderedTeams, new JsonSerializerOptions { WriteIndented = true }));
+            File.WriteAllText(
+                OutputFile,
+                JsonSerializer.Serialize(orderedTeams, AppJsonContext.Default.ListTeam)
+            );
         }
         catch (Exception e)
         {
@@ -283,33 +283,26 @@ public static class Processor
                 "Очікувалося правило нарахування очок. Наприклад: Вища ліга  (D0): 12.0 11.8 11.6 11.4 11.2 11.0 10.8 10.6 10.4 10.2");
 
         var name = match.Groups[1].Value;
-        var id = match.Groups[2].Value.ToUpper(CultureInfo.CurrentCulture);
+        var id = match.Groups[2].Value.ToUpper(CultureInfo.InvariantCulture);
 
         if (PointRules.Any(x => x.Id == id))
             throw new ApplicationException($"Ідентифікатор ліги турніру не є унікальним: {id}");
 
         var rule = new PointRule(name, id);
 
-        foreach (Capture c in match.Groups[3].Captures)
-        {
-            decimal v;
-            try
-            {
-                if (!decimal.TryParse(c.Value, NumberStyles.Any, null, out v))
-                    v = decimal.Parse(c.Value, NumberStyles.Any, CultureInfo.InvariantCulture);
-            }
-            catch (Exception e)
-            {
-                throw new ApplicationException($"Неможливо розібрати число \"{c.Value}\": {e.Message}", e);
-            }
+        var numbers = match.Groups[3].Value
+            .Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 
+        foreach (var num in numbers)
+        {
+            decimal v = decimal.Parse(num.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture);
             rule.Points.Add(v);
         }
 
-        if (rule.Points.Count < 3) throw new ApplicationException($"Занадто мало правил нарахування очок за місця: {rule.Points.Count}");
+        if (rule.Points.Count < 3)
+            throw new ApplicationException($"Занадто мало правил нарахування очок за місця: {rule.Points.Count}");
 
         PointRules.Add(rule);
-
         Con.Info(rule.ToString());
     }
 
@@ -389,20 +382,20 @@ public static class Processor
                 Con.Warn(
                     $"Дата турніру \"{DateOnly.FromDateTime(lichessTournament.StartsAt.Date)}\" не відповідає даті з конфігурації \"{CurrentTournamentSet.Date}\". Перевірте коректність даних.");
 
-            if (!lichessTournament.FullName.Contains(CurrentTournamentSet.Id, StringComparison.CurrentCultureIgnoreCase))
+            if (!lichessTournament.FullName.Contains(CurrentTournamentSet.Id, StringComparison.InvariantCultureIgnoreCase))
                 Con.Warn(
                     $"У назві турніру \"{lichessTournament.FullName}\" відсутній ідентифікатор з конфігурації \"{CurrentTournamentSet.Id}\". Перевірте коректність даних.");
 
             var pointRule =
-                PointRules.FirstOrDefault(x => lichessTournament.FullName.Contains(x.Id, StringComparison.CurrentCultureIgnoreCase));
+                PointRules.FirstOrDefault(x => lichessTournament.FullName.Contains(x.Id, StringComparison.InvariantCultureIgnoreCase));
 
             if (pointRule == null)
             {
                 pointRule =
                     PointRules.FirstOrDefault(x => lichessTournament.FullName.Contains(
-                        x.Id.Substring(0, 1) + 
-                        "-" + 
-                        x.Id.Substring(1), StringComparison.CurrentCultureIgnoreCase));
+                        x.Id.Substring(0, 1) +
+                        "-" +
+                        x.Id.Substring(1), StringComparison.InvariantCultureIgnoreCase));
 
                 if (pointRule == null)
                 {
@@ -415,7 +408,7 @@ public static class Processor
 
             foreach (var team in lichessTournament.TeamBattle.Teams)
                 if (!Teams.ContainsKey(team.Key))
-                    Teams.Add(team.Key, new Team(team.Key, team.Value.First())); 
+                    Teams.Add(team.Key, new Team(team.Key, team.Value.First()));
 
             foreach (var teamStanding in lichessTournament.TeamStanding)
             {
@@ -454,19 +447,18 @@ public static class Processor
         var id = match.Groups[1].Value;
 
         var httpClient = new HttpClient();
-
         var uri = $"https://lichess.org/api/tournament/{id}";
 
         Root? lichessTournament;
 
         try
         {
-            lichessTournament = JsonSerializer.Deserialize<Root>(httpClient.GetStreamAsync(uri).Result);
+            using var stream = httpClient.GetStreamAsync(uri).Result;
+            lichessTournament = JsonSerializer.Deserialize(stream, AppJsonContext.Default.Root);
         }
         catch (HttpRequestException e)
         {
-            throw new ApplicationException($"Неможливо отримати інформацію про турнір за посиланням \"{uri}\": {e.Message}",
-                e);
+            throw new ApplicationException($"Неможливо отримати інформацію про турнір за посиланням \"{uri}\": {e.Message}", e);
         }
         catch (JsonException e)
         {
@@ -476,21 +468,22 @@ public static class Processor
 
         if (lichessTournament is { TeamBattle.Teams.Count: > 10 })
         {
-            uri += "/teams";
+            var teamsUri = uri + "/teams";
 
             try
             {
-                lichessTournament.TeamStanding = JsonSerializer.Deserialize<TeamsRoot>(httpClient.GetStreamAsync(uri).Result)!.TeamStanding;
+                using var stream = httpClient.GetStreamAsync(teamsUri).Result;
+                var teamsRoot = JsonSerializer.Deserialize(stream, AppJsonContext.Default.TeamsRoot);
+                lichessTournament!.TeamStanding = teamsRoot!.TeamStanding;
             }
             catch (HttpRequestException e)
             {
-                throw new ApplicationException($"Неможливо отримати інформацію про команди турніру за посиланням \"{uri}\": {e.Message}",
-                    e);
+                throw new ApplicationException($"Неможливо отримати інформацію про команди турніру за посиланням \"{teamsUri}\": {e.Message}", e);
             }
             catch (JsonException e)
             {
                 throw new ApplicationException(
-                    $"Неможливо розібрати інформацію про команди турніру, отриману за посиланням \"{uri}\": {e.Message}", e);
+                    $"Неможливо розібрати інформацію про команди турніру, отриману за посиланням \"{teamsUri}\": {e.Message}", e);
             }
         }
 
@@ -537,7 +530,7 @@ public static class Processor
 
         var comment = m.Groups["comment"].Value.Trim();
 
-        var team = Teams.Values.FirstOrDefault(t => string.Equals(t.Name, teamName, StringComparison.CurrentCultureIgnoreCase));
+        var team = Teams.Values.FirstOrDefault(t => string.Equals(t.Name, teamName, StringComparison.InvariantCultureIgnoreCase));
         if (team == null && !Teams.TryGetValue(teamName, out team))
             throw new ApplicationException($"Команду не знайдено серед учасників турнірів: \"{teamName}\"");
 
@@ -555,5 +548,4 @@ public static class Processor
 
         Con.Info($"{team.Name}: {(delta >= 0 ? "+" : "")}{delta} {(string.IsNullOrWhiteSpace(comment) ? "" : "- " + comment)}");
     }
-
 }
