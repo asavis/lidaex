@@ -2,10 +2,10 @@
 using lidaex.Model;
 using lidaex.Model.Lichess;
 using System.Globalization;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using static System.String;
 
 namespace lidaex;
 
@@ -31,9 +31,9 @@ public static class Processor
     private static TournamentSet? CurrentTournamentSet => TournamentSets.LastOrDefault();
     private static bool IsFirstTournamentSet => TournamentSets.Count < 2;
     private static int NumberOfTournamentsInFirstTournamentSet => TournamentSets.First().NumberOfTournaments;
-    private static string UploadHost { get; set; } = Empty;
-    private static string UploadUser { get; set; } = Empty;
-    private static string UploadPassword { get; set; } = Empty;
+    private static string UploadHost { get; set; } = string.Empty;
+    private static string UploadUser { get; set; } = string.Empty;
+    private static string UploadPassword { get; set; } = string.Empty;
     private static bool UnfinishedTournamentsFound { get; set; }
 
     private static void Main(string[] args)
@@ -44,6 +44,13 @@ public static class Processor
         try
         {
             Console.OutputEncoding = Encoding.UTF8;
+
+            string argli = args != null ? string.Join(' ', args).ToLowerInvariant() : string.Empty;
+            if (argli.Contains("--about") || argli.Contains("--license"))
+            {
+                ShowAbout();
+                return;
+            }
 
             var configFileName = GetFullConfigFileName();
 
@@ -58,7 +65,7 @@ public static class Processor
                 if (!isUploadOnlyMode) WriteResults();
 
                 var uploadConfigFileName = GetFullUploadConfigFileName();
-                if (!IsNullOrEmpty(uploadConfigFileName))
+                if (!string.IsNullOrEmpty(uploadConfigFileName))
                 {
                     ReadUploadConfig(uploadConfigFileName);
                     if (isSilent || HaveUserUploadConfirmation()) UploadResults();
@@ -79,6 +86,31 @@ public static class Processor
             Con.Info("\nНатисніть будь-яку клавішу для виходу...");
             Console.ReadKey();
         }
+    }
+
+    private static void ShowAbout()
+    {
+        var asm = Assembly.GetExecutingAssembly();
+        var version = asm.GetName().Version?.ToString() ?? "unknown";
+
+        Console.WriteLine($"lidaex v{version}");
+        Console.WriteLine("© 2023–2025 Alexander Stasiv");
+        Console.WriteLine("License: MIT");
+        Console.WriteLine("Repository: https://github.com/asavis/lidaex");
+        Console.WriteLine("\n--- LICENSE TEXT ---\n");
+
+        var resourceName = asm.GetManifestResourceNames()
+                              .FirstOrDefault(n => n.EndsWith("LICENSE", StringComparison.OrdinalIgnoreCase));
+
+        if (resourceName is null)
+        {
+            Console.WriteLine("Ліцензію не знайдено у збірці.");
+            return;
+        }
+
+        using var stream = asm.GetManifestResourceStream(resourceName);
+        using var reader = new StreamReader(stream!, Encoding.UTF8);
+        Console.WriteLine(reader.ReadToEnd());
     }
 
     private static string GetFullConfigFileName()
@@ -112,7 +144,7 @@ public static class Processor
 
         Con.Warn("Файл конфігурації відправлення не знайдено");
 
-        return Empty;
+        return string.Empty;
     }
 
     private static void ReadUploadConfig(string uploadConfigFileName)
@@ -202,7 +234,7 @@ public static class Processor
             {
                 var l = line.Trim();
 
-                if (IsNullOrWhiteSpace(l) || l.StartsWith("#")) continue;
+                if (string.IsNullOrWhiteSpace(l) || l.StartsWith("#")) continue;
 
                 if (l.StartsWith("Турнір ", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -400,10 +432,10 @@ public static class Processor
                 if (pointRule == null)
                 {
                     throw new ApplicationException(
-                        $"Неможливо визначити лігу турніру \"{lichessTournament.FullName}\", так як у назві відсутній один з ідентифікаторів ліг, описаних у конфігурації: {Join('/', PointRules.Select(r => r.Id))}");
+                        $"Неможливо визначити лігу турніру \"{lichessTournament.FullName}\", так як у назві відсутній один з ідентифікаторів ліг, описаних у конфігурації: {string.Join('/', PointRules.Select(r => r.Id))}");
                 }
 
-                Con.Warn($"Тимчасове рішення використано! Визначена ліга: \"{pointRule.Name}\". Ідентифікатор ліги має бути одним із описаних у конфігурації: {Join('/', PointRules.Select(r => r.Id))}");
+                Con.Warn($"Тимчасове рішення використано! Визначена ліга: \"{pointRule.Name}\". Ідентифікатор ліги має бути одним із описаних у конфігурації: {string.Join('/', PointRules.Select(r => r.Id))}");
             }
 
             foreach (var team in lichessTournament.TeamBattle.Teams)
