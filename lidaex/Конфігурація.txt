@@ -1,3 +1,7 @@
+# lidaex config
+# Copyright (c) 2023–2025 Alexander Stasiv
+# SPDX-License-Identifier: MIT
+
 Правила нарахування очок:
 # Назви Турнірів на lichess повинні містити текст у дужках (тобто Д0/Д1/Д2/Д3) 
 Вища ліга  (Д0): 12,0 11,8 11,6 11,4 11,2 11,0 10,8 10,6 10,4 10,2
@@ -5,58 +9,60 @@
 Друга ліга (Д2): 8,0 7,8 7,6 7,4 7,2 7,0 6,8 6,6 6,4 6,2
 Третя ліга (Д3): 6,0 5,8 5,6 5,4 5,2 5,0 4,8 4,6 4,4 4,2 4,0 3,8 3,6 3,4 3,2 3,0 2,8 2,6 2,4 2,2 2,0 1,8 1,6 1,4 1,2 1,0 0,8 0,6 0,4 0,2 0,0
 
-Турнір (130) [09.09.2022]:
+Турнір (242) [12.09.2025]:
 # Назва Турніру на lichess повинна містити текст у дужках (тобто 114/115...).
 # Турнір на lichess повинен проходити в зазначену у дужках дату. В іншому випадку користувач отримає попередження.
 # Рядки нижче повинні закінчуватися на "/ідентифікатор_турніру"
-Вища ліга (Д0)  https://lichess.org/tournament/BQlvSUus
-Перша ліга “A” (Д1-а)  https://lichess.org/tournament/jsz8JyD8
-Перша ліга “B”(Д1-b)  https://lichess.org/tournament/UkhK7Ioi
-Перша ліга “C” (Д1-c)  https://lichess.org/tournament/u74mOKSI
-Друга ліга “A” (Д2-a)   https://lichess.org/tournament/BYuRYivp
-Друга ліга “B” (Д2-b)   https://lichess.org/tournament/wEgpPRbJ
-Друга ліга “C” (Д2-c)   https://lichess.org/tournament/QE7VlRnV
-Третя ліга “A” (Д3-a)   https://lichess.org/tournament/Dm0mhnJh
-Третя ліга “B” (Д3-b)   https://lichess.org/tournament/EN5s1sfc
-Третя ліга “C” (Д3-c)   https://lichess.org/tournament/bgoNmyP7
+Вища ліга (Д0) https://lichess.org/tournament/8kyUimXG 
+Перша ліга “A” (Д1-А) https://lichess.org/tournament/twHjtGkN                   
+Перша ліга “B” (Д1-В) https://lichess.org/tournament/3INzwvbs         
+Перша ліга “C” (Д1-С)  https://lichess.org/tournament/Zda7A0YD          
+Друга ліга “A” (Д2-А) https://lichess.org/tournament/G8RJXaa8             
+Друга ліга “B” (Д2-В) https://lichess.org/tournament/uHLUto0v 
+Друга ліга “C” (Д2-С)  https://lichess.org/tournament/gU2O59hU                   
+Третя ліга “A” (Д3-А)  https://lichess.org/tournament/MxN606sY            
+Третя ліга “B” (Д3-В)  https://lichess.org/tournament/YEtBIRJ6
 
-Турнір (131) [16.09.2022]:
-Вища ліга (Д0) https://lichess.org/tournament/tl30AAjC
-Перша ліга “A” (Д1-а) https://lichess.org/tournament/fihOM8uJ
-Перша ліга “B”(Д1-b) https://lichess.org/tournament/ZDcVsrPJ
-Перша ліга “C” (Д1-c) https://lichess.org/tournament/Og1U2Cm8
-Друга ліга “A” (Д2-a) https://lichess.org/tournament/IpZq3gBn
-Друга ліга “B” (Д2-b) https://lichess.org/tournament/jAFf1K1O
-Друга ліга “C” (Д2-c) https://lichess.org/tournament/ULsThKVM
-Третя ліга “A” (Д3-a) https://lichess.org/tournament/tKEvz2n5
-Третя ліга “B” (Д3-b) https://lichess.org/tournament/7bd4lfMj
-Третя ліга “C” (Д3-c) https://lichess.org/tournament/8gzSwT5Y
+Турнір (243) [19.09.2025]:
+Вища ліга (Д0) https://lichess.org/tournament/8IWyrFH3 
+Перша ліга “A” (Д1-А) https://lichess.org/tournament/t6M7OHDS                   
+Перша ліга “B” (Д1-В)  https://lichess.org/tournament/zeHel2DQ        
+Перша ліга “C” (Д1-С)  https://lichess.org/tournament/EkqfK9ed          
+Друга ліга “A” (Д2-А)  https://lichess.org/tournament/jBc6raRm            
+Друга ліга “B” (Д2-В) https://lichess.org/tournament/az4SqJg7 
+Друга ліга “C” (Д2-С) https://lichess.org/tournament/ly5bFNSv                    
+Третя ліга “A” (Д3-А) https://lichess.org/tournament/pfem3Ris             
+Третя ліга “B” (Д3-В) https://lichess.org/tournament/VkfD6TPO
 
-Турнір (132) [23.09.2022]:
-Вища ліга (Д0)  https://lichess.org/tournament/8cuIMaKl
-Перша ліга “A” (Д1-а)  https://lichess.org/tournament/1SEKJZ0l
-Перша ліга “B”(Д1-b)  https://lichess.org/tournament/7ajRrK4L
-Перша ліга “C” (Д1-c)  https://lichess.org/tournament/Lqn4knES
-Друга ліга “A” (Д2-a)   https://lichess.org/tournament/6ekSyglD
-Друга ліга “B” (Д2-b)   https://lichess.org/tournament/6BZBCxdA
-Друга ліга “C” (Д2-c)   https://lichess.org/tournament/KzI3hSMg
-Третя ліга “A” (Д3-a)   https://lichess.org/tournament/vwOVIBWx
-Третя ліга “B” (Д3-b)   https://lichess.org/tournament/Z6TFplnI
-Третя ліга “C” (Д3-c)   https://lichess.org/tournament/XgtmcRfg
+Турнір (244) [26.09.2025]:
+Вища ліга (Д0) https://lichess.org/tournament/XREFSft8 
+Перша ліга “A” (Д1-А) https://lichess.org/tournament/EUoR03r0                  
+Перша ліга “B” (Д1-В) https://lichess.org/tournament/sfq5PdkB          
+Перша ліга “C” (Д1-С) https://lichess.org/tournament/OSLYvRS3            
+Друга ліга “A” (Д2-А) https://lichess.org/tournament/uzpEI1fr              
+Друга ліга “B” (Д2-В) https://lichess.org/tournament/5Ofd0xhl 
+Друга ліга “C” (Д2-С)  https://lichess.org/tournament/3uzKcMf5                   
+Третя ліга “A” (Д3-А) https://lichess.org/tournament/FctCBI94             
+Третя ліга “B” (Д3-В) https://lichess.org/tournament/PNxYcNBx
+
+Турнір (245) [03.10.2025]:
+Вища ліга (Д0) https://lichess.org/tournament/wn7KHuCu 
+Перша ліга “A” (Д1-А) https://lichess.org/tournament/egRNS3tR                  
+Перша ліга “B” (Д1-В) https://lichess.org/tournament/HuvLE9ie          
+Перша ліга “C” (Д1-С) https://lichess.org/tournament/OJ4zjuPe            
+Друга ліга “A” (Д2-А)  https://lichess.org/tournament/HSwxy2Bu             
+Друга ліга “B” (Д2-В) https://lichess.org/tournament/qLdSF4cr 
+Друга ліга “C” (Д2-С) https://lichess.org/tournament/JC6vFPro                    
+Третя ліга “A” (Д3-А) https://lichess.org/tournament/WOpWGgsZ             
+Третя ліга “B” (Д3-В) https://lichess.org/tournament/D9oihZyk
 
 Бонуси та штрафи:
-# Формат рядка:
-#   НазваКоманди [ +/−Число ] Коментар
-# Дрібна частина може бути з крапкою або комою: +2.5 або +2,5
-# Після блоку в дужках іде пробіл та довільний коментар (може бути порожнім).
-# Приклад: НазваКоманди [+5.5] Коментар
-Chess dream (Ivano-Frankivsk) [+2] Перемога на 1-й дошці та активна участь у турнірі
-Avangard Junior Team [-5,5] Несвоєчасна подача заявки та відсутність складу на старт
-BEREGSZÁSZ "JOKER" [-2.2] Порушення регламенту: запізнення на раунд понад 10 хв
-м.Трускавець СЗШ №2 НВК гімназія [+3] Командний дух і повна явка на всі тури
-КЗ "ДЮСШ №1" Нікополь [-1,1] Неповний протокол після матчу
-Melit-chess:club [+0.05] Дрібне коригування рейтингового коефіцієнта
-Nikopol_official-2 [-100] Технічне зняття за повторні неявки
+# Розділ один і лише в кінці файлу, після всіх Турнірів.
+# Для кожної команди — один рядок із поточним сумарним бонусом/штрафом.
+# Формат: НазваКоманди [+/-Число] Коментар
+# Приклад: «Енергія» Львів [+3.7] Відновлення очок через дискваліфікацію читера у суперників
+
+КЗ "ДЮСШ №1" Нікополь [-10.6] Порушення п.3.8 один з гравців грає у російських турнірах
 
 # Якщо існує файл "Конфігурація відправки.txt", то після генерації файлу даних standings.json 
 # користувачу буде запропоновано можливість відправити цей файл згідно з вказаною конфігурацією.
@@ -65,6 +71,5 @@ Nikopol_official-2 [-100] Технічне зняття за повторні н
 # User: user
 # Password: password
 
-# Copyright 2024 Alexander Stasiv
 
 
